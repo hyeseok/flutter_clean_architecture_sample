@@ -1,0 +1,118 @@
+# -----------------------------
+# OS / Misc
+# -----------------------------
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# -----------------------------
+# IntelliJ / Android Studio
+# -----------------------------
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# -----------------------------
+# VS Code
+# -----------------------------
+.vscode/
+*.code-workspace
+
+# -----------------------------
+# Flutter / Dart / Pub
+# -----------------------------
+**/doc/api/
+/.dart_tool/
+/.flutter-plugins
+/.flutter-plugins-dependencies
+/.flutter-plugins-shared
+.pub-cache/
+/.pub/
+build/
+coverage/
+
+# -----------------------------
+# Android
+# -----------------------------
+.gradle/
+**/local.properties
+
+# Android build outputs
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# Keystore (비밀!)
+**/*.jks
+**/*.keystore
+
+# NDK / CMake
+.cxx/
+
+# Google/Firebase config (비밀!)
+google-services.json
+
+# -----------------------------
+# iOS
+# -----------------------------
+/ios/Pods/
+/ios/.symlinks/
+/ios/Flutter/Flutter.framework
+/ios/Flutter/Flutter.podspec
+/ios/Flutter/Generated.xcconfig
+/ios/ServiceDefinitions.json
+
+# Xcode user files
+*.xcworkspace
+*.xcuserstate
+*.xcuserdata/
+*.xcuserdatad/
+
+/ios/Podfile.lock   # 필요시 커밋 여부 결정
+GoogleService-Info.plist   # 비밀!
+
+# -----------------------------
+# macOS
+# -----------------------------
+/macos/Pods/
+/macos/Flutter/GeneratedPluginRegistrant.swift
+/macos/Flutter/Generated.xcconfig
+
+# -----------------------------
+# Windows
+# -----------------------------
+/windows/flutter/ephemeral/
+
+# -----------------------------
+# Linux
+# -----------------------------
+/linux/flutter/ephemeral/
+
+# -----------------------------
+# Fastlane (배포 자동화 사용 시)
+/fastlane/report.xml
+/fastlane/Preview.html
+/fastlane/screenshots/
+/fastlane/test_output/
+
+# -----------------------------
+# Env / Secrets
+# -----------------------------
+.env
+*.env
+
+# -----------------------------
+# Symbolication / Obfuscation
+# -----------------------------
+app.*.symbols
+app.*.map.json
