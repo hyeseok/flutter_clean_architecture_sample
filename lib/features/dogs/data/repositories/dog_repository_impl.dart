@@ -1,3 +1,4 @@
+import 'package:clean_architecture_sample/core/error/error_mapper.dart';
 import 'package:clean_architecture_sample/core/result/result.dart';
 import 'package:clean_architecture_sample/features/dogs/domain/entities/breed.dart';
 import 'package:clean_architecture_sample/features/dogs/domain/entities/dog_image.dart';
@@ -12,20 +13,32 @@ class DogRepositoryImpl implements DogRepository {
 
   @override
   Future<Result<DogImage>> getBreedRandomImage(String breed) async {
-    final result = (await remote.fetchBreedRandomImage(breed)).toEntity();
-    return Ok(result);
+    try {
+      final result = (await remote.fetchBreedRandomImage(breed)).toEntity();
+      return Ok(result);
+    } catch (e) {
+      return Err(ErrorMapper.toFailure(e));
+    }
   }
 
   @override
   Future<Result<List<Breed>>> getBreeds() async {
-    final result = (await remote.fetchBreeds()).toEntities();
-    return Ok(result);
+    try {
+      final result = (await remote.fetchBreeds()).toEntities();
+      return Ok(result);
+    } catch (e) {
+      return Err(ErrorMapper.toFailure(e));
+    }
   }
 
   @override
   Future<Result<DogImage>> getRandomImage() async {
-    final result = (await remote.fetchRandomImage()).toEntity();
-    return Ok(result);
+    try {
+      final result = (await remote.fetchRandomImage()).toEntity();
+      return Ok(result);
+    } catch (e) {
+      return Err(ErrorMapper.toFailure(e));
+    }
   }
 
 }
