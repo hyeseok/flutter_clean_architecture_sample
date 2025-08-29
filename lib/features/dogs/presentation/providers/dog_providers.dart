@@ -1,3 +1,4 @@
+import 'package:clean_architecture_sample/core/result/result.dart';
 import 'package:clean_architecture_sample/features/dogs/domain/repositories/dog_repository.dart';
 import 'package:clean_architecture_sample/features/dogs/domain/usecases/get_breeds.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,16 +17,16 @@ final getBreedRandomImageUsecaseProvider =
     Provider<GetBreedRandomImage>((_) => GetBreedRandomImage(sl<DogRepository>()));
 
 // 목록
-final breedsProvider = FutureProvider<List<Breed>>((ref) async {
+final breedsProvider = FutureProvider<Result<List<Breed>>>((ref) async {
   return ref.read(getBreedsUsecaseProvider).call();
 });
 
 // 랜덤 이미지
-final randomImageProvider = FutureProvider<DogImage>((ref) async {
+final randomImageProvider = FutureProvider<Result<DogImage>>((ref) async {
   return ref.read(getRandomImageUsecaseProvider).call();
 });
 
 // 품종별 랜덤 이미지(파라미터)
-final breedRandomImageProvider = FutureProvider.family<DogImage, String>((ref, breed) async {
+final breedRandomImageProvider = FutureProvider.family<Result<DogImage>, String>((ref, breed) async {
   return ref.read(getBreedRandomImageUsecaseProvider).call(breed);
 });

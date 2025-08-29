@@ -14,7 +14,7 @@ extension AsyncValueX<T> on AsyncValue<T> {
    return when(
       data: data,
       error: (err, _) {
-        final message = ErrorMapper.toMessage(err);
+        final message = ErrorMapper.toFailure(err).message;
         if (error != null) return error(message);
 
         return Center(

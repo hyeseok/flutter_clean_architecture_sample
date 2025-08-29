@@ -18,6 +18,54 @@
 
 ---
 
+## [1.2.0] - 2025-08-29
+### Added
+- **Domain 결과타입 통일:** 성공/실패를 값으로 다루는 `Result<T>`(sealed) 도입.
+  - `lib/core/result/result.dart` (Ok/Err, `when<R>`, `fold<R>` 포함)
+  - `lib/core/result/failures.dart` (Network/Timeout/Auth/Forbidden/NotFound/Server/Validation/Unknown)
+- **헬퍼(선택):** `lib/core/extensions/result_extensions.dart` (`map`, `flatMapAsync`, `getOrElse` 등)
+
+### Changed
+- **⚠️ Breaking:** 모든 도메인 Repository/UseCase 시그니처를 `Future<Result<T>>`로 통일.  
+  예) `DogRepository.getBreeds(): Future<List<Breed>>` → `Future<Result<List<Breed>>>`
+- **UI 처리 규칙:** `AsyncValue<Result<T>>`의 **data 브랜치에서 `Result.when`으로 분기**하도록 표준화  
+  (프레임워크 예외는 `AsyncValue.error`, 비즈니스 실패는 `Result.Err`)
+
+### Code (excerpts)
+#### `lib/core/result/result.dart`
+```dart
+sealed class Result<T> {
+  const Result();
+
+  R when<R>({
+    required R Function(T value) ok,
+    required R Function(Failure failure) err,
+  });
+
+  R fold<R>(R Function(Failure) onErr, R Function(T) onOk) =>
+          when(ok: onOk, err: onErr);
+
+  bool get isOk => this is Ok<T>;
+  bool get isErr => this is Err<T>;
+}
+
+class Ok<T> extends Result<T> {
+  final T value;
+  const Ok(this.value);
+  @override
+  R when<R>({required R Function(T) ok, required R Function(Failure) err}) => ok(value);
+}
+
+class Err<T> extends Result<T> {
+  final Failure failure;
+  const Err(this.failure);
+  @override
+  R when<R>({required R Function(T) ok, required R Function(Failure) err}) => err(failure);
+}
+```
+
+---
+
 ## [1.1.0] - 2025-08-29
 ### Added
 - **Network core 확장:** `makeDio` 도입 및 공통 설정(`DioConfig`) 추가.

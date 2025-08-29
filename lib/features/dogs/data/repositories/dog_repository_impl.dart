@@ -1,3 +1,4 @@
+import 'package:clean_architecture_sample/core/result/result.dart';
 import 'package:clean_architecture_sample/features/dogs/domain/entities/breed.dart';
 import 'package:clean_architecture_sample/features/dogs/domain/entities/dog_image.dart';
 import 'package:clean_architecture_sample/features/dogs/domain/repositories/dog_repository.dart';
@@ -10,12 +11,21 @@ class DogRepositoryImpl implements DogRepository {
 
 
   @override
-  Future<DogImage> getBreedRandomImage(String breed) async => (await remote.fetchBreedRandomImage(breed)).toEntity();
+  Future<Result<DogImage>> getBreedRandomImage(String breed) async {
+    final result = (await remote.fetchBreedRandomImage(breed)).toEntity();
+    return Ok(result);
+  }
 
   @override
-  Future<List<Breed>> getBreeds() async => (await remote.fetchBreeds()).toEntities();
+  Future<Result<List<Breed>>> getBreeds() async {
+    final result = (await remote.fetchBreeds()).toEntities();
+    return Ok(result);
+  }
 
   @override
-  Future<DogImage> getRandomImage() async => (await remote.fetchRandomImage()).toEntity();
+  Future<Result<DogImage>> getRandomImage() async {
+    final result = (await remote.fetchRandomImage()).toEntity();
+    return Ok(result);
+  }
 
 }

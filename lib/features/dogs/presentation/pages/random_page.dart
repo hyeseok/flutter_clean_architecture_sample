@@ -1,4 +1,5 @@
 import 'package:clean_architecture_sample/core/extensions/async_value_extensions.dart';
+import 'package:clean_architecture_sample/core/extensions/result_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,7 +17,9 @@ class RandomPage extends ConsumerWidget {
       appBar: AppBar(title: const Text('Random Dog'),),
       body: Center(
         child: async.whenOrDefault(
-            data: (DogImage data) => Image.network(data.url, fit: BoxFit.contain,),
+            data: (res) => res.toWidget(
+              ok: (DogImage data) => Image.network(data.url, fit: BoxFit.contain,)
+            ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
