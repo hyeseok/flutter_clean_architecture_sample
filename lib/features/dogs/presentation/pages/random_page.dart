@@ -1,3 +1,4 @@
+import 'package:clean_architecture_sample/core/extensions/async_value_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,10 +16,8 @@ class RandomPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Random Dog'),),
       body: Center(
-        child: async.when(
+        child: async.whenOrDefault(
             data: (DogImage data) => Image.network(data.url, fit: BoxFit.contain,),
-            error: (Object error, StackTrace stackTrace) => Text('오류: $error'),
-            loading: () => const CircularProgressIndicator()
         ),
       ),
       floatingActionButton: FloatingActionButton(

@@ -1,3 +1,4 @@
+import 'package:clean_architecture_sample/core/extensions/async_value_extensions.dart';
 import 'package:clean_architecture_sample/features/dogs/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -15,7 +16,7 @@ class BreedsPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Dog Breeds'),),
-      body: async.when(
+      body: async.whenOrDefault(
           data: (breeds) => ListView.separated(
               itemBuilder: (_, i) {
                 final b = breeds[i];
@@ -33,8 +34,6 @@ class BreedsPage extends ConsumerWidget {
               },
               itemCount: breeds.length
           ),
-          error: (error, stack) => Center(child: Text('오류: ${error.toString()}')),
-          loading: () => const Center(child: CircularProgressIndicator(),)
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => context.push(DogsRoutes.random),
