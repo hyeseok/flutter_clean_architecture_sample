@@ -18,6 +18,66 @@
 
 ---
 
+## [1.1.0] - 2025-08-29
+### Added
+- **Network core 확장:** `makeDio` 도입 및 공통 설정(`DioConfig`) 추가.
+- **Interceptors:**
+  - `AuthHeaderInterceptor`(Bearer 토큰/공통 헤더 주입)
+  - `RefreshTokenInterceptor`(+ `TokenRefresher`로 동시성 안전 401 자동 토큰 갱신 & 재요청)
+  - `RetryInterceptor`(지수 백오프, 기본 GET만 재시도)
+  - `LoggingInterceptor`(디버그 빌드 전용 요청/응답/에러 로그)
+- **Error 공통화:** `ApiException` 파생 타입(Unauthenticated/Forbidden/Server/Network/TimeoutX) 추가,  
+  `ErrorMapper`가 `DioException`을 위 예외/문구로 매핑.
+
+### Changed
+- **DI 구성:** 리프레시 요청 전용 `Dio`와 앱 전역용 `Dio(instanceName: 'app_dio')`를 분리 등록해 순환 의존 방지.
+
+### Fixed
+- **타입 불일치 수정:** `final currentDio = Dio()..options = req` → **잘못된 타입 대입**을 수정.  
+  `RequestOptions`에서 필요한 값만 뽑아 `BaseOptions`로 초기화 후 `fetch(req)` 사용.
+
+### Code (excerpts)
+#### `lib/core/network/make_dio.dart`
+```dart
+Dio makeDio({
+  required DioConfig config,
+  required TokenStorage tokenStorage,
+  required AuthApi authApi,
+  bool enableRetry = true,
+  bool enableLogging = true,
+}) {
+  final dio = Dio(BaseOptions(
+    baseUrl: config.baseUrl,
+    connectTimeout: config.connectTimeout,
+    receiveTimeout: config.receiveTimeout,
+    headers: config.defaultHeaders,
+    responseType: ResponseType.json,
+    validateStatus: (s) => s != null && s > 0,
+  ));
+
+  // 재요청용 self 참조
+  dio.interceptors.add(InterceptorsWrapper(onRequest: (opt, h) {
+    opt.extra['dio_instance'] = dio;
+    h.next(opt);
+  }));
+
+  final refresher = TokenRefresher(tokenStorage: tokenStorage, authApi: authApi);
+
+  if (enableLogging) dio.interceptors.add(LoggingInterceptor());
+  dio.interceptors.add(AuthHeaderInterceptor(tokenStorage));
+  dio.interceptors.add(RefreshTokenInterceptor(
+    refresher: refresher,
+    tokenStorage: tokenStorage,
+    authApi: authApi,
+  ));
+  if (enableRetry) dio.interceptors.add(RetryInterceptor());
+
+  return dio;
+}
+
+
+---
+
 ## [1.0.1] - 2025-08-29
 ### Added
 - **공통 로딩/에러 처리 분리:** UI/에러 처리를 모듈화하여 화면에서 `data` 렌더링에만 집중하도록 개선.
