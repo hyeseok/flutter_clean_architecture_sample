@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 
 class ErrorMapper {
   static String toMessage(Object error) {

@@ -1,6 +1,5 @@
 import 'package:clean_architecture_sample/core/extensions/async_value_extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/entities/dog_image.dart';
